@@ -56,6 +56,14 @@
   const tabs = [...document.querySelectorAll("[data-preview-tab]")];
   const panels = [...document.querySelectorAll("[data-preview-panel]")];
   const names = tabs.map((tab) => tab.getAttribute("data-preview-tab")).filter(Boolean);
+
+  // .window-content is the outer CSS grid. Each preview panel must span
+  // the complete window; otherwise the active panel gets trapped in the
+  // sidebar column and its own three-column layout collapses.
+  panels.forEach((panel) => {
+    panel.style.gridColumn = "1 / -1";
+  });
+
   let current = names.includes("workspace") ? "workspace" : names[0];
   let paused = false;
   let resumeTimer = 0;

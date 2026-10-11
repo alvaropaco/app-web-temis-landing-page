@@ -2,18 +2,20 @@
   const year = document.querySelector("#year");
   if (year) year.textContent = new Date().getFullYear();
 
-  // Use the official TemisChat symbol in every brand slot.
+  // Use the official TemisChat symbol as a single-colour vector mask.
   document.querySelectorAll(".brand-mark").forEach((brandMark) => {
-    brandMark.innerHTML = '<img src="./assets/temischat-mark.svg" alt="" aria-hidden="true">';
-    const logo = brandMark.querySelector("img");
-    if (logo) {
-      Object.assign(logo.style, {
-        width: "100%",
-        height: "100%",
-        display: "block",
-        objectFit: "contain"
-      });
-    }
+    brandMark.innerHTML = "";
+    Object.assign(brandMark.style, {
+      backgroundColor: "#AC7008",
+      WebkitMaskImage: 'url("./assets/temischat-mark.svg")',
+      maskImage: 'url("./assets/temischat-mark.svg")',
+      WebkitMaskRepeat: "no-repeat",
+      maskRepeat: "no-repeat",
+      WebkitMaskPosition: "center",
+      maskPosition: "center",
+      WebkitMaskSize: "contain",
+      maskSize: "contain"
+    });
   });
 
   // Mobile navigation.
@@ -59,7 +61,7 @@
   let resumeTimer = 0;
 
   const activate = (name, focus = false) => {
-    if (!names.includes(name)) return;
+    if (!name || !names.includes(name)) return;
     current = name;
 
     tabs.forEach((tab) => {
@@ -82,7 +84,6 @@
     });
   };
 
-  // Establish a deterministic initial state even if browser restores form/DOM state.
   if (current) activate(current);
 
   tabs.forEach((tab, index) => {

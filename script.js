@@ -2,6 +2,17 @@
   const year = document.querySelector("#year");
   if (year) year.textContent = new Date().getFullYear();
 
+  // Use the official TemisChat symbol mark in the header.
+  const brandMark = document.querySelector(".brand-mark");
+  if (brandMark) {
+    brandMark.innerHTML = '<img src="./assets/temischat-mark.svg" alt="" aria-hidden="true" />';
+    const logo = brandMark.querySelector("img");
+    logo.style.width = "100%";
+    logo.style.height = "100%";
+    logo.style.display = "block";
+    logo.style.objectFit = "contain";
+  }
+
   const menuButton = document.querySelector(".menu-toggle");
   const nav = document.querySelector(".desktop-nav");
   if (menuButton && nav) {

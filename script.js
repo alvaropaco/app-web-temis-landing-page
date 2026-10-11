@@ -35,6 +35,54 @@
     });
   }
 
+  // Product preview layout guard.
+  // The old .window-content grid makes the active preview panel a grid item
+  // inside the first column. The panel itself owns the sidebar/main/context
+  // grid, so the outer container must behave as a simple block container.
+  const layoutStyle = document.createElement("style");
+  layoutStyle.textContent = `
+    .window-content {
+      display: block !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      height: clamp(390px, 34vw, 485px) !important;
+      min-height: 390px !important;
+      overflow: hidden !important;
+    }
+    .preview-panel {
+      display: none !important;
+      width: 100% !important;
+      height: 100% !important;
+      min-width: 0 !important;
+      min-height: 390px !important;
+      margin: 0 !important;
+    }
+    .preview-panel.is-active {
+      display: grid !important;
+    }
+    .preview-panel[hidden] {
+      display: none !important;
+    }
+    .preview-panel > * {
+      min-width: 0;
+    }
+    @media (max-width: 920px) {
+      .window-content {
+        height: 430px !important;
+      }
+    }
+    @media (max-width: 640px) {
+      .window-content {
+        height: 420px !important;
+        min-height: 420px !important;
+      }
+      .preview-panel.is-active {
+        min-height: 420px !important;
+      }
+    }
+  `;
+  document.head.appendChild(layoutStyle);
+
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // Scroll reveal.
@@ -56,14 +104,6 @@
   const tabs = [...document.querySelectorAll("[data-preview-tab]")];
   const panels = [...document.querySelectorAll("[data-preview-panel]")];
   const names = tabs.map((tab) => tab.getAttribute("data-preview-tab")).filter(Boolean);
-
-  // .window-content is the outer CSS grid. Each preview panel must span
-  // the complete window; otherwise the active panel gets trapped in the
-  // sidebar column and its own three-column layout collapses.
-  panels.forEach((panel) => {
-    panel.style.gridColumn = "1 / -1";
-  });
-
   let current = names.includes("workspace") ? "workspace" : names[0];
   let paused = false;
   let resumeTimer = 0;

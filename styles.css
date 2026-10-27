@@ -94,7 +94,7 @@
   border-radius: 6px !important;
   background: #fff !important;
   color: #171717 !important;
-  font-size: 12px !important;
+  font-size: 0 !important;
   font-weight: 700 !important;
   line-height: 1.2 !important;
   white-space: normal !important;
@@ -103,12 +103,10 @@
 }
 
 .download-section .download-card[data-platform="macos"] .download-alt > a::before {
-  content: 'Intel';
-  margin-right: 7px;
-  color: #8b651f;
-  font-size: 10px;
-  letter-spacing: .6px;
-  text-transform: uppercase;
+  content: 'Baixar — Intel';
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 700;
 }
 
 .download-section .download-card[data-platform="macos"] .download-alt > a:hover {
@@ -120,11 +118,6 @@
 
 .download-section .download-card[data-platform="macos"] .download-meta-row {
   margin-top: 8px !important;
-}
-
-.download-section .download-card[data-platform="macos"] .download-meta::before {
-  content: 'Apple Silicon · ';
-  font-weight: 700;
 }
 
 .download-section .download-card[data-platform="macos"] .download-meta {

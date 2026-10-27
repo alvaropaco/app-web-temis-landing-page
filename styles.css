@@ -1,7 +1,7 @@
 @import url('./styles-base.css');
 
 /* Desktop app download hardening.
- * Keep the platform icons bounded even if a broad SVG rule is introduced elsewhere.
+ * Keep platform icons bounded even if a broad SVG rule is introduced elsewhere.
  */
 .download-section .download-grid,
 .download-section .download-card {
@@ -10,6 +10,10 @@
 
 .download-section .download-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.download-section .download-os {
+  min-width: 0;
 }
 
 .download-section .os-icon {
@@ -23,9 +27,12 @@
   display: grid !important;
   place-items: center !important;
   overflow: hidden !important;
+  box-sizing: border-box !important;
 }
 
-.download-section .os-icon > svg {
+/* Reset any generic SVG sizing rule before applying the exact icon dimensions. */
+.download-section .download-os .os-icon > svg {
+  all: unset !important;
   display: block !important;
   width: 21px !important;
   height: 21px !important;
@@ -34,7 +41,14 @@
   max-width: 21px !important;
   max-height: 21px !important;
   flex: 0 0 21px !important;
+  box-sizing: border-box !important;
   overflow: hidden !important;
+  color: currentColor !important;
+  fill: currentColor !important;
+}
+
+.download-section .download-os .os-icon > svg > path {
+  fill: currentColor !important;
 }
 
 .download-section .download-primary {
@@ -44,6 +58,82 @@
   align-items: center !important;
   justify-content: center !important;
   white-space: normal !important;
+}
+
+/* Make the two macOS architectures visually equal first-class download actions. */
+.download-section .download-card[data-platform="macos"] .download-primary {
+  font-size: 0 !important;
+}
+
+.download-section .download-card[data-platform="macos"] .download-primary::after {
+  content: 'Baixar — Apple Silicon';
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.download-section .download-card[data-platform="macos"] .download-alt {
+  display: block !important;
+  margin-top: 10px !important;
+}
+
+.download-section .download-card[data-platform="macos"] .download-alt > span {
+  display: none !important;
+}
+
+.download-section .download-card[data-platform="macos"] .download-alt > a {
+  min-width: 0 !important;
+  width: 100% !important;
+  min-height: 48px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  padding: 0 20px !important;
+  border: 1px solid rgba(172,112,8,.28) !important;
+  border-radius: 6px !important;
+  background: #fff !important;
+  color: #171717 !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  white-space: normal !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.7) !important;
+  transition: transform .2s var(--ease), background .2s ease, border-color .2s ease, box-shadow .2s ease !important;
+}
+
+.download-section .download-card[data-platform="macos"] .download-alt > a::before {
+  content: 'Intel';
+  margin-right: 7px;
+  color: #8b651f;
+  font-size: 10px;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+}
+
+.download-section .download-card[data-platform="macos"] .download-alt > a:hover {
+  transform: translateY(-2px);
+  background: #fffaf1 !important;
+  border-color: rgba(172,112,8,.55) !important;
+  box-shadow: 0 8px 20px rgba(172,112,8,.10) !important;
+}
+
+.download-section .download-card[data-platform="macos"] .download-meta-row {
+  margin-top: 8px !important;
+}
+
+.download-section .download-card[data-platform="macos"] .download-meta::before {
+  content: 'Apple Silicon · ';
+  font-weight: 700;
+}
+
+.download-section .download-card[data-platform="macos"] .download-meta {
+  font-size: 0 !important;
+}
+
+.download-section .download-card[data-platform="macos"] .download-meta::after {
+  content: '.dmg · Apple Silicon';
+  font-size: 10px;
 }
 
 .download-section .download-card::after {
@@ -67,7 +157,7 @@
     flex-basis: 42px !important;
   }
 
-  .download-section .os-icon > svg {
+  .download-section .download-os .os-icon > svg {
     width: 20px !important;
     height: 20px !important;
     min-width: 20px !important;
@@ -75,5 +165,10 @@
     max-width: 20px !important;
     max-height: 20px !important;
     flex-basis: 20px !important;
+  }
+
+  .download-section .download-card[data-platform="macos"] .download-primary,
+  .download-section .download-card[data-platform="macos"] .download-alt > a {
+    min-height: 46px !important;
   }
 }

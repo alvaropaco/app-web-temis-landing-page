@@ -1,0 +1,60 @@
+name: Install generated favicons
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    if: github.event.head_commit.message != 'chore: install generated favicons'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download favicon package
+        run: |
+          set -euo pipefail
+          base="https://realfavicongenerator.net/files/1249727d-79b5-4943-a0f8-8fac12f8ee10"
+          curl -fsSL "$base/favicon.svg" -o favicon.svg
+          curl -fsSL "$base/favicon-96x96.png" -o favicon-96x96.png
+          curl -fsSL "$base/favicon.ico" -o favicon.ico
+          curl -fsSL "$base/apple-touch-icon.png" -o apple-touch-icon.png
+          curl -fsSL "$base/web-app-manifest-192x192.png" -o web-app-manifest-192x192.png
+          curl -fsSL "$base/web-app-manifest-512x512.png" -o web-app-manifest-512x512.png
+          curl -fsSL "$base/site.webmanifest" -o site.webmanifest
+
+      - name: Install favicon markup
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("index.html")
+          text = path.read_text(encoding="utf-8")
+          markup = """    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+              <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+              <link rel="shortcut icon" href="/favicon.ico" />
+              <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+              <link rel="manifest" href="/site.webmanifest" />
+          """
+          if 'href="/favicon-96x96.png"' not in text:
+              marker = '    <title>TemisChat — Copiloto jurídico com contexto</title>\n'
+              if marker not in text:
+                  raise SystemExit("Could not find the <head> insertion point in index.html")
+              text = text.replace(marker, marker + markup, 1)
+              path.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Remove bootstrap workflow
+        run: rm -f .github/workflows/install-favicons.yml .favicon-bootstrap
+
+      - name: Commit favicon assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add favicon.svg favicon-96x96.png favicon.ico apple-touch-icon.png web-app-manifest-192x192.png web-app-manifest-512x512.png site.webmanifest index.html .github/workflows/install-favicons.yml .favicon-bootstrap
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: install generated favicons"
+          git push

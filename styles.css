@@ -1,4 +1,4 @@
-@import url('./styles-base.css');
+@import url('./styles-base.css?v=download-layout-20261027-3');
 
 /* Desktop app download hardening.
  * Keep platform icons bounded even if a broad SVG rule is introduced elsewhere.
@@ -62,14 +62,7 @@
 
 /* Make the two macOS architectures visually equal first-class download actions. */
 .download-section .download-card[data-platform="macos"] .download-primary {
-  font-size: 0 !important;
-}
-
-.download-section .download-card[data-platform="macos"] .download-primary::after {
-  content: 'Baixar — Apple Silicon';
-  font-size: 12px;
-  line-height: 1.2;
-  font-weight: 700;
+  font-size: 12px !important;
 }
 
 .download-section .download-card[data-platform="macos"] .download-alt {
@@ -94,7 +87,7 @@
   border-radius: 6px !important;
   background: #fff !important;
   color: #171717 !important;
-  font-size: 0 !important;
+  font-size: 12px !important;
   font-weight: 700 !important;
   line-height: 1.2 !important;
   white-space: normal !important;
@@ -103,10 +96,8 @@
 }
 
 .download-section .download-card[data-platform="macos"] .download-alt > a::before {
-  content: 'Baixar — Intel';
-  font-size: 12px;
-  line-height: 1.2;
-  font-weight: 700;
+  content: none !important;
+  display: none !important;
 }
 
 .download-section .download-card[data-platform="macos"] .download-alt > a:hover {
@@ -164,4 +155,13 @@
   .download-section .download-card[data-platform="macos"] .download-alt > a {
     min-height: 46px !important;
   }
+}
+
+
+/* Last-resort safeguards for the platform marks. The SVGs are also bounded
+   inline in index.html so a stale stylesheet cannot enlarge them. */
+.download-section .download-os .os-icon,
+.download-section .download-os .os-icon > svg {
+  transform: none !important;
+  zoom: 1 !important;
 }

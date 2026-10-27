@@ -98,17 +98,23 @@
 .cnj-art-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:13px}.cnj-art-tags span{padding:4px 5px;border:1px solid #e5e5e5;border-radius:4px;background:#fff;color:#737373;font-size:6px}
 
 /* Desktop download section */
+/* Keep download cards readable at narrow desktop widths and on mobile. */
 .download-section {
   padding-top: 74px;
   padding-bottom: 96px;
 }
 .download-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
   gap: 18px;
+}
+.download-grid > * {
+  min-width: 0;
 }
 .download-card {
   position: relative;
+  min-width: 0;
   background: #fff;
   border: 1px solid #e8e5df;
   border-radius: 9px;
@@ -138,7 +144,17 @@
 .download-os {
   display: flex;
   align-items: center;
-  gap: 14px;
+  flex-wrap: wrap;
+  gap: 12px;
+  min-width: 0;
+}
+.os-names {
+  min-width: 0;
+  flex: 1 1 120px;
+}
+.os-names small {
+  display: block;
+  line-height: 1.45;
 }
 .os-icon {
   width: 46px;
@@ -180,6 +196,23 @@
 }
 .download-primary {
   width: 100%;
+  min-width: 0;
+  justify-content: center;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.35;
+  padding-inline: clamp(12px, 2vw, 24px);
+  position: relative;
+  z-index: 1;
+}
+.download-card a,
+.download-card .recommended-pill {
+  overflow-wrap: anywhere;
+}
+.download-card .download-primary:focus-visible,
+.download-card .download-alt a:focus-visible {
+  outline: 3px solid rgba(172, 112, 8, 0.45);
+  outline-offset: 3px;
 }
 .dl-icon {
   width: 15px;
@@ -266,7 +299,7 @@
   color: var(--gold);
   border-color: var(--gold);
 }
-@media (max-width: 820px) {
+@media (max-width: 900px) {
   .download-grid {
     grid-template-columns: 1fr;
   }
@@ -283,12 +316,35 @@
     padding: 20px 18px 18px;
   }
   .recommended-pill {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    margin: 0;
+    margin-left: auto;
+    position: static;
+    font-size: 8px;
+    padding: 4px 7px;
   }
   .download-os {
-    padding-right: 74px;
+    align-items: center;
+    gap: 10px;
+  }
+  .os-names {
+    flex-basis: calc(100% - 60px);
+  }
+  .download-alt {
+    align-items: flex-start;
+  }
+  .download-footnote {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 360px) {
+  .download-card {
+    padding-inline: 14px;
+  }
+  .download-os {
+    align-items: flex-start;
+  }
+  .os-icon {
+    width: 40px;
+    height: 40px;
   }
 }

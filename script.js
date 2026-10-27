@@ -385,6 +385,38 @@
     }, 6200);
   }
 
+  // Desktop downloads: the buttons are static links to the versionless files
+  // under temischat/latest/ on the release CDN (republished by CI on every
+  // release); this fetch only enriches the labels with the live version/date
+  // from the same manifest the app's auto-updater consumes.
+  const userAgent = navigator.userAgent;
+  const visitorPlatform = /Windows/i.test(userAgent)
+    ? "windows"
+    : /Macintosh|Mac OS X/i.test(userAgent) && !/iPhone|iPad|iPod/i.test(userAgent)
+      ? "macos"
+      : null;
+  if (visitorPlatform) {
+    const pill = document.querySelector(`.download-card[data-platform="${visitorPlatform}"] .recommended-pill`);
+    if (pill) pill.hidden = false;
+  }
+
+  (async () => {
+    try {
+      const response = await fetch("https://temis-chat-releases.temischat.com/temischat/latest/latest.json");
+      if (!response.ok) throw new Error(`CDN ${response.status}`);
+      const manifest = await response.json();
+      const versionLabel = document.querySelector("#dl-version");
+      if (versionLabel && manifest.version) versionLabel.textContent = `versão ${manifest.version}`;
+      const dateLabel = document.querySelector("#dl-date");
+      if (dateLabel && manifest.pub_date) {
+        dateLabel.textContent = `atualizada em ${new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(manifest.pub_date))}`;
+      }
+    } catch (error) {
+      // Manifest unavailable (CDN offline or not yet published): static
+      // download links keep working; labels stay generic.
+    }
+  })();
+
   // Restrained pointer parallax on desktop.
   const hero = document.querySelector(".hero-visual");
   const windowCard = document.querySelector(".product-window");

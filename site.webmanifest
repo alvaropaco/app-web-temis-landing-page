@@ -1,0 +1,19 @@
+{
+  "name": "TemisChat — copiloto jurídico",
+  "short_name": "TemisChat",
+  "description": "Copiloto jurídico com contexto para análise processual.",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#FAFAFA",
+  "theme_color": "#171717",
+  "icons": [
+    {
+      "src": "./assets/temischat-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

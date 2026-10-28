@@ -2,6 +2,22 @@
   const year = document.querySelector("#year");
   if (year) year.textContent = new Date().getFullYear();
 
+  // Keep a tag-manager-ready event stream without loading trackers or cookies.
+  window.dataLayer = window.dataLayer || [];
+  document.addEventListener("click", (event) => {
+    const target = event.target instanceof Element ? event.target.closest("[data-track]") : null;
+    if (!target) return;
+    const detail = {
+      event: target.getAttribute("data-track"),
+      location: target.getAttribute("data-track-location") || "not_set",
+      page_path: window.location.pathname,
+      asset: target.getAttribute("data-asset") || undefined,
+      link_url: target.href?.startsWith("https://") ? target.href : undefined
+    };
+    window.dataLayer.push(detail);
+    document.dispatchEvent(new CustomEvent("temis:track", { detail }));
+  });
+
   // Use the official TemisChat symbol as a single-colour vector mask.
   document.querySelectorAll(".brand-mark").forEach((brandMark) => {
     brandMark.innerHTML = "";
@@ -22,21 +38,70 @@
   const menuButton = document.querySelector(".menu-toggle");
   const nav = document.querySelector(".desktop-nav");
   if (menuButton && nav) {
+    const setMenuOpen = (open, returnFocus = false) => {
+      menuButton.setAttribute("aria-expanded", String(open));
+      menuButton.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+      nav.classList.toggle("open", open);
+      if (returnFocus) menuButton.focus();
+    };
+
     menuButton.addEventListener("click", () => {
-      const expanded = menuButton.getAttribute("aria-expanded") === "true";
-      menuButton.setAttribute("aria-expanded", String(!expanded));
-      nav.classList.toggle("open", !expanded);
+      setMenuOpen(menuButton.getAttribute("aria-expanded") !== "true");
     });
     nav.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        nav.classList.remove("open");
-        menuButton.setAttribute("aria-expanded", "false");
-      });
+      link.addEventListener("click", () => setMenuOpen(false));
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && menuButton.getAttribute("aria-expanded") === "true") {
+        setMenuOpen(false, true);
+      }
+    });
+    document.addEventListener("click", (event) => {
+      if (menuButton.getAttribute("aria-expanded") !== "true") return;
+      const clickedElement = event.target instanceof Element ? event.target : null;
+      if (!clickedElement?.closest(".site-header")) setMenuOpen(false);
     });
   }
 
-  // Animated prism-film shader background.
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const motionButton = document.querySelector(".motion-toggle");
+  if (motionButton) {
+    motionButton.hidden = reduceMotion;
+    motionButton.addEventListener("click", () => {
+      const paused = !document.body.classList.contains("motion-paused");
+      document.body.classList.toggle("motion-paused", paused);
+      motionButton.setAttribute("aria-pressed", String(paused));
+      motionButton.textContent = paused ? "Retomar animações" : "Pausar animações";
+      document.dispatchEvent(new CustomEvent("temis:motionchange", { detail: { paused } }));
+    });
+  }
+
+  // Scroll reveal must not depend on the decorative WebGL background.
+  const revealElements = [...document.querySelectorAll(".reveal")];
+  if ("IntersectionObserver" in window && !reduceMotion) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -35px 0px" });
+    const revealRects = revealElements.map((element) => element.getBoundingClientRect());
+    revealElements.forEach((element, index) => {
+      const rect = revealRects[index];
+      if (rect.top < window.innerHeight * 0.96 && rect.bottom > 0) {
+        element.classList.add("is-visible");
+      } else {
+        observer.observe(element);
+      }
+    });
+  } else {
+    revealElements.forEach((element) => element.classList.add("is-visible"));
+  }
+
+  try {
+  if (document.querySelector(".hero")) {
+  // Animated prism-film shader background.
   const prismCanvas = document.createElement("canvas");
   prismCanvas.className = "prism-film-background";
   prismCanvas.setAttribute("aria-hidden", "true");
@@ -233,6 +298,7 @@
         };
 
         const render = (now) => {
+          if (!prismCanvas.isConnected) return;
           resize();
           pointerState.x += (pointerState.tx - pointerState.x) * 0.025;
           pointerState.y += (pointerState.ty - pointerState.y) * 0.025;
@@ -256,6 +322,11 @@
         requestAnimationFrame(render);
       }
     }
+  }
+  }
+  } catch (error) {
+    console.warn("TemisChat decorative background could not start.", error);
+    document.querySelector(".prism-film-background")?.classList.add("prism-film-fallback");
   }
 
   // Product preview layout guard.
@@ -303,28 +374,11 @@
   `;
   document.head.appendChild(layoutStyle);
 
-  // Scroll reveal.
-  const revealElements = [...document.querySelectorAll(".reveal")];
-  if ("IntersectionObserver" in window && !reduceMotion) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      });
-    }, { threshold: 0.12, rootMargin: "0px 0px -35px 0px" });
-    revealElements.forEach((element) => observer.observe(element));
-  } else {
-    revealElements.forEach((element) => element.classList.add("is-visible"));
-  }
-
   // Product preview switcher: Workspace -> CNJ -> Overlay.
   const tabs = [...document.querySelectorAll("[data-preview-tab]")];
   const panels = [...document.querySelectorAll("[data-preview-panel]")];
   const names = tabs.map((tab) => tab.getAttribute("data-preview-tab")).filter(Boolean);
   let current = names.includes("workspace") ? "workspace" : names[0];
-  let paused = false;
-  let resumeTimer = 0;
 
   const activate = (name, focus = false) => {
     if (!name || !names.includes(name)) return;
@@ -355,9 +409,6 @@
   tabs.forEach((tab, index) => {
     tab.addEventListener("click", () => {
       activate(tab.getAttribute("data-preview-tab"));
-      paused = true;
-      window.clearTimeout(resumeTimer);
-      resumeTimer = window.setTimeout(() => { paused = false; }, 9000);
     });
 
     tab.addEventListener("keydown", (event) => {
@@ -369,26 +420,40 @@
     });
   });
 
-  const preview = document.querySelector(".preview-switcher");
-  if (preview && !reduceMotion && names.length > 1) {
-    preview.addEventListener("pointerenter", () => { paused = true; });
-    preview.addEventListener("pointerleave", () => { paused = false; });
-    preview.addEventListener("focusin", () => { paused = true; });
-    preview.addEventListener("focusout", (event) => {
-      if (!preview.contains(event.relatedTarget)) paused = false;
+  document.querySelectorAll("[data-open-preview]").forEach((link) => {
+    link.addEventListener("click", () => {
+      activate(link.getAttribute("data-open-preview"));
     });
-
-    window.setInterval(() => {
-      if (paused || document.hidden) return;
-      const index = names.indexOf(current);
-      activate(names[(index + 1) % names.length]);
-    }, 6200);
-  }
+  });
 
   // Desktop downloads: the buttons are static links to the versionless files
   // under temischat/latest/ on the release CDN (republished by CI on every
-  // release); this fetch only enriches the labels with the live version/date
-  // from the same manifest the app's auto-updater consumes.
+  // release); labels use the live manifest when CORS permits and a packaged
+  // metadata copy otherwise, so a blocked cross-origin read hides no release.
+  // Because those filenames never change, the release build id is appended as
+  // ?v= — otherwise a cached copy from a previous release can answer a click.
+  const releaseBuild = (manifest) => {
+    if (typeof manifest.build === "string" && /^[0-9a-f]{7,40}$/i.test(manifest.build)) {
+      return manifest.build;
+    }
+    const match = typeof manifest.notes === "string" ? manifest.notes.match(/\bBuild\s+([0-9a-f]{7,40})\b/i) : null;
+    return match ? match[1] : "";
+  };
+  const bustDownloadCaches = (stamp) => {
+    if (!stamp) return;
+    document.querySelectorAll("a[data-asset]").forEach((link) => {
+      if (!(link instanceof HTMLAnchorElement)) return;
+      let url;
+      try {
+        url = new URL(link.href);
+      } catch {
+        return;
+      }
+      if (url.hostname !== "temis-chat-releases.temischat.com") return;
+      url.searchParams.set("v", stamp);
+      link.href = url.toString();
+    });
+  };
   const userAgent = navigator.userAgent;
   const visitorPlatform = /Windows/i.test(userAgent)
     ? "windows"
@@ -400,22 +465,54 @@
     if (pill) pill.hidden = false;
   }
 
-  (async () => {
-    try {
-      const response = await fetch("https://temis-chat-releases.temischat.com/temischat/latest/latest.json");
-      if (!response.ok) throw new Error(`CDN ${response.status}`);
-      const manifest = await response.json();
-      const versionLabel = document.querySelector("#dl-version");
-      if (versionLabel && manifest.version) versionLabel.textContent = `versão ${manifest.version}`;
-      const dateLabel = document.querySelector("#dl-date");
-      if (dateLabel && manifest.pub_date) {
-        dateLabel.textContent = `atualizada em ${new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(manifest.pub_date))}`;
+  if (document.querySelector("#dl-version, [data-release-latest]")) {
+    (async () => {
+      const status = document.querySelector("[data-release-status]");
+      let manifest;
+      let liveManifest = true;
+      try {
+        try {
+          const response = await fetch("https://temis-chat-releases.temischat.com/temischat/latest/latest.json");
+          if (!response.ok) throw new Error(`CDN ${response.status}`);
+          manifest = await response.json();
+        } catch (cdnError) {
+          liveManifest = false;
+          const response = await fetch("./assets/release-latest.json");
+          if (!response.ok) throw new Error(`Local release fallback ${response.status}`);
+          manifest = await response.json();
+        }
+        if (!manifest.version || !manifest.pub_date) throw new Error("Release metadata is incomplete");
+
+        const build = releaseBuild(manifest);
+        const stamp = build || String(Date.parse(manifest.pub_date) || "");
+
+        document.querySelectorAll("#dl-version, [data-release-version]").forEach((label) => {
+          const versionLabel = label.hasAttribute("data-release-version")
+            ? manifest.version
+            : `versão ${manifest.version}`;
+          label.textContent = build ? `${versionLabel} · build ${build}` : versionLabel;
+        });
+        const publishedAt = new Date(manifest.pub_date);
+        const formattedDate = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", year: "numeric" }).format(publishedAt);
+        document.querySelectorAll("#dl-date, [data-release-date]").forEach((label) => {
+          label.textContent = label.hasAttribute("data-release-date") ? formattedDate : `atualizada em ${formattedDate}`;
+          if (label instanceof HTMLTimeElement) label.dateTime = manifest.pub_date;
+        });
+        const notes = document.querySelector("[data-release-notes]");
+        if (notes && typeof manifest.notes === "string" && manifest.notes.trim()) {
+          notes.textContent = manifest.notes.trim();
+        }
+        bustDownloadCaches(stamp);
+        if (status) {
+          status.textContent = liveManifest
+            ? `Versão, build e data carregadas do manifesto oficial da release${build ? ` (build ${build})` : ""}.`
+            : `Exibindo a cópia local da versão ${manifest.version}${build ? ` (build ${build})` : ""}; o manifesto ao vivo não pôde ser lido pelo navegador.`;
+        }
+      } catch (error) {
+        if (status) status.textContent = "Não foi possível carregar os metadados agora. Os downloads oficiais continuam disponíveis nesta página.";
       }
-    } catch (error) {
-      // Manifest unavailable (CDN offline or not yet published): static
-      // download links keep working; labels stay generic.
-    }
-  })();
+    })();
+  }
 
   // Restrained pointer parallax on desktop.
   const hero = document.querySelector(".hero-visual");

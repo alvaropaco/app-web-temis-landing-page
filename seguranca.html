@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#FAFAFA" />
+    <meta name="description" content="Controles e limites de segurança do TemisChat: autenticação, isolamento por organização, provedores de IA, criptografia, retenção, exclusão e uso responsável de dados." />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <title>Segurança e tratamento de dados no piloto | TemisChat</title>
+    <link rel="canonical" href="https://temischat.com/seguranca.html" />
+    <link rel="icon" href="./assets/temischat-mark.svg" type="image/svg+xml" />
+    <link rel="manifest" href="./site.webmanifest" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="TemisChat" />
+    <meta property="og:title" content="Segurança e tratamento de dados no piloto TemisChat" />
+    <meta property="og:description" content="O que está implementado, o que varia por configuração e o que confirmar antes de usar dados reais." />
+    <meta property="og:url" content="https://temischat.com/seguranca.html" />
+    <meta property="og:image" content="https://temischat.com/assets/temischat-social.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="TemisChat — copiloto jurídico com contexto" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css?v=20261028-1" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://temischat.com/#organization",
+            "name": "TemisChat",
+            "url": "https://temischat.com/",
+            "logo": { "@type": "ImageObject", "url": "https://temischat.com/assets/temischat-mark.svg" },
+            "email": "contato@temischat.com"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://temischat.com/#website",
+            "name": "TemisChat",
+            "url": "https://temischat.com/",
+            "inLanguage": "pt-BR",
+            "publisher": { "@id": "https://temischat.com/#organization" }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://temischat.com/" },
+              { "@type": "ListItem", "position": 2, "name": "Segurança", "item": "https://temischat.com/seguranca.html" }
+            ]
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://temischat.com/seguranca.html#webpage",
+            "url": "https://temischat.com/seguranca.html",
+            "name": "Segurança e tratamento de dados no piloto TemisChat",
+            "description": "Controles implementados, provedores externos e limites da documentação de segurança do piloto.",
+            "datePublished": "2026-10-27",
+            "dateModified": "2026-10-27",
+            "inLanguage": "pt-BR",
+            "isPartOf": { "@id": "https://temischat.com/#website" },
+            "about": ["Segurança da informação", "Privacidade", "LGPD", "Controle de acesso"]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body class="inner-page">
+    <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+      <a class="brand" href="./index.html" aria-label="TemisChat — início" translate="no"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M16 3.5 27 8v7.7c0 6.4-4.5 10.4-11 12.8C9.5 26.1 5 22.1 5 15.7V8L16 3.5Z" stroke="currentColor" stroke-width="1.5"/><path d="M16 8v14M10.5 11.5h11M11 12l-4 6h8l-4-6ZM21 12l-4 6h8l-4-6ZM12 22h8" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>temis<span class="brand-light">chat</span></span></a>
+      <nav class="desktop-nav" id="main-navigation" aria-label="Navegação principal"><a href="./index.html#plataforma">Plataforma</a><a href="./index.html#como-funciona">Como funciona</a><a href="./seguranca.html" aria-current="page">Segurança</a><a href="./index.html#download">Download</a></nav>
+      <div class="header-actions"><a class="login-link" href="mailto:contato@temischat.com" data-track="contact_email" data-track-location="header">Fale conosco</a><a class="button button-small button-gold" href="./index.html#download" data-track="download_cta" data-track-location="header">Baixar o app <span aria-hidden="true">↗</span></a><button class="menu-toggle" type="button" aria-label="Abrir menu" aria-controls="main-navigation" aria-expanded="false"><span></span><span></span></button></div>
+    </header>
+
+    <main class="page-main" id="conteudo" tabindex="-1">
+      <header class="page-hero">
+        <nav class="breadcrumbs" aria-label="Navegação estrutural"><ol><li><a href="./index.html">Início</a></li><li aria-current="page">Segurança</li></ol></nav>
+        <div class="eyebrow"><span class="eyebrow-dot"></span> CONTROLES, LIMITES E PERGUNTAS ABERTAS</div>
+        <h1>Segurança sem promessas que a documentação não sustenta</h1>
+        <p>Veja o que está implementado no piloto, quais dados podem sair do seu ambiente para provedores externos e quais pontos ainda precisam de confirmação antes do uso com dados reais.</p>
+        <div class="page-meta"><span>Revisado em <time datetime="2026-10-27">27 de outubro de 2026</time></span><span>Contato: <a href="mailto:contato@temischat.com?subject=Seguran%C3%A7a%20e%20privacidade%20TemisChat">contato@temischat.com</a></span></div>
+      </header>
+
+      <div class="page-content content-layout">
+        <aside class="article-toc" aria-label="Nesta página"><strong>NESTA PÁGINA</strong><nav><a href="#autenticacao">Autenticação</a><a href="#provedores">Provedores e dados</a><a href="#controles">Controles técnicos</a><a href="#retencao">Retenção e exclusão</a><a href="#treinamento">Treinamento de modelos</a><a href="#downloads">Downloads</a><a href="#antes-de-usar">Antes de usar</a></nav></aside>
+
+        <article class="article-body">
+          <section>
+            <div class="callout">
+              <h2>Escopo desta avaliação</h2>
+              <p>Esta página resume a implementação conhecida do piloto e os limites da documentação pública. Ela não é uma certificação, uma auditoria independente nem uma garantia de que todos os ambientes tenham a mesma configuração.</p>
+            </div>
+          </section>
+
+          <section id="autenticacao">
+            <h2>Autenticação e organizações</h2>
+            <p>O aplicativo oferece login, criação de conta e recuperação de acesso. O workspace exige uma sessão autenticada. A API valida os tokens de autenticação e o chat também verifica a sessão antes de estabelecer a conexão.</p>
+            <p>No primeiro uso de uma conta sem organização associada, o backend provisiona uma organização, um workspace e um caso iniciais para aquela identidade. Se já existir uma organização válida associada ao token, ela prevalece. O download do instalador é público e separado dessa autenticação.</p>
+            <p>Não apresentamos como recurso atual um painel self-service completo de permissões administrativas, convites ou múltiplas organizações.</p>
+          </section>
+
+          <section id="provedores">
+            <h2>Provedores de IA e tratamento de conteúdo</h2>
+            <p>A arquitetura do agente pode chamar provedores externos por endpoints compatíveis com OpenAI. A configuração prevê <strong>OpenAI, DeepSeek e Gemini</strong>, com modelo principal e fallback. Componentes de síntese jurídica e embeddings também podem usar <strong>Google Vertex AI</strong>.</p>
+            <p>Isso significa que os dados necessários para gerar uma resposta podem ser transmitidos ao provedor configurado. O provedor, o modelo e a região podem variar por ambiente; não descrevemos todo o processamento como local.</p>
+            <div class="table-scroll" role="region" aria-label="Dados e visão de tratamento" tabindex="0">
+              <table class="info-table">
+                <thead><tr><th>Categoria</th><th>O que está documentado</th><th>O que confirmar</th></tr></thead>
+                <tbody>
+                  <tr><td>Conta e organização</td><td>Autenticação e provisionamento por identidade</td><td>Condições da conta e administradores da organização</td></tr>
+                  <tr><td>Perguntas e respostas</td><td>Processamento por provider externo configurado</td><td>Retenção e uso secundário pelo provider aplicável</td></tr>
+                  <tr><td>Consultas por CNJ</td><td>Retorno depende do provedor processual</td><td>Origem, logs e permanência dos dados consultados</td></tr>
+                  <tr><td>Documentos e memória</td><td>Há infraestrutura e escopos no código; recursos amplos não são anunciados como piloto atual</td><td>Disponibilidade real, região, retenção e exclusão</td></tr>
+                  <tr><td>Logs e backups</td><td>Não há cronograma público global encontrado</td><td>Prazos por ambiente e categoria de dado</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Não há nesta página uma garantia de residência de dados no Brasil. Configurações técnicas de região, isoladamente, não comprovam a localização de todos os dados em produção. A <a href="./privacidade.html">política do site</a> também reconhece que fornecedores podem envolver transferências internacionais.</p>
+          </section>
+
+          <section id="controles">
+            <h2>Controles técnicos com escopo específico</h2>
+            <div class="security-grid">
+              <section class="security-card"><h3>Isolamento por escopo</h3><p>As consultas de memória aplicam organização, workspace e escopo de caso na seleção dos dados. O código também contém testes de isolamento entre duas identidades. Isso é evidência de implementação e teste no repositório, não certificação independente.</p></section>
+              <section class="security-card"><h3>Credenciais de conectores</h3><p>Na implementação dos conectores de e-mail e calendário, senhas e tokens são protegidos com AES-256-GCM e não devem ser devolvidos nas respostas. Essa afirmação é específica dessas credenciais; não significa criptografia ponta a ponta de todos os dados.</p></section>
+              <section class="security-card"><h3>Permissões e ações externas</h3><p>Os conectores possuem permissões separadas de leitura e envio verificadas no servidor. Ações externas prevêem confirmação humana. Conectores não são apresentados como parte do escopo atual anunciado na homepage.</p></section>
+              <section class="security-card"><h3>Revisão profissional</h3><p>A resposta em streaming pode ser interrompida e as citações são exibidas quando retornadas pelo agente. A revisão humana continua necessária para fatos, processos, fontes e estratégia.</p></section>
+            </div>
+          </section>
+
+          <section id="retencao">
+            <h2>Retenção e exclusão</h2>
+            <p>Existem controles pontuais, como expiração de buffers de retomada e limpeza de uploads órfãos. Eles não formam um cronograma global de retenção. Não encontramos uma política pública completa para contas, prompts, documentos, memórias, logs, backups e dados transmitidos aos provedores.</p>
+            <p>Por isso, não publicamos “retenção zero” nem prazos universais. Se a retenção for um requisito para seu escritório ou departamento, solicite a matriz de dados e os prazos aplicáveis ao seu ambiente antes de iniciar o uso.</p>
+            <p>Também não há um fluxo self-service completo e publicamente documentado para excluir conta e todos os dados associados. Para solicitar exclusão ou exercer direitos de titular, escreva para <a href="mailto:contato@temischat.com?subject=Solicita%C3%A7%C3%A3o%20de%20privacidade%20TemisChat">contato@temischat.com</a>. O escopo, a identidade e os próximos passos devem ser confirmados no atendimento.</p>
+          </section>
+
+          <section id="treinamento">
+            <h2>Uso de dados para treinamento de modelos</h2>
+            <p>A interface de onboarding contém uma afirmação limitada: <strong>dados cadastrais não são usados para treinar modelos públicos</strong>. Ela não deve ser ampliada, por interpretação, para prompts, documentos, memórias, áudio ou para toda forma de treinamento pelos provedores.</p>
+            <p>Não encontramos documentação pública suficiente para fazer uma promessa ampla sobre essas outras categorias. Consulte as condições do provider configurado e confirme com a equipe antes de enviar conteúdo confidencial. Fine-tuning próprio não é anunciado como recurso do piloto, o que também não define as políticas dos fornecedores externos.</p>
+          </section>
+
+          <section id="downloads">
+            <h2>Assinatura e avisos dos instaladores</h2>
+            <ul>
+              <li><strong>macOS:</strong> a release atual informa assinatura Developer ID e notarização, com builds para Apple Silicon e Intel.</li>
+              <li><strong>Windows:</strong> a release atual informa que MSI e NSIS ainda não possuem assinatura Authenticode. O SmartScreen pode exibir um aviso.</li>
+              <li><strong>Origem:</strong> baixe somente pelos links deste site, que apontam para o CDN oficial <code>temis-chat-releases.temischat.com</code>.</li>
+            </ul>
+            <p>A assinatura do artefato usado pelo atualizador e a assinatura Authenticode do instalador Windows são controles diferentes. Consulte a <a href="./notas-de-versao.html">página de notas de versão</a> para as informações publicadas com a release atual.</p>
+          </section>
+
+          <section id="antes-de-usar">
+            <h2>Antes de usar dados reais</h2>
+            <ul class="check-list">
+              <li>Use dados fictícios ou autorizados no primeiro teste.</li>
+              <li>Confirme provider, região, retenção, treinamento e exclusão para seu ambiente.</li>
+              <li>Não envie senhas, segredos ou documentos desnecessários à finalidade do teste.</li>
+              <li>Verifique dados processuais críticos e fontes diretamente na origem.</li>
+              <li>Documente internamente quem pode autorizar o uso de dados de clientes.</li>
+            </ul>
+            <p>Se qualquer resposta necessária para sua análise de risco ainda não estiver publicada, solicite-a pelo canal de <a href="mailto:contato@temischat.com?subject=Avalia%C3%A7%C3%A3o%20de%20seguran%C3%A7a%20TemisChat">segurança e privacidade</a>.</p>
+          </section>
+
+          <aside class="page-cta">
+            <h2>Comece com um teste controlado</h2>
+            <p>Baixe o app, entre ou crie sua conta e experimente primeiro com dados fictícios. Para dúvidas comerciais ou de segurança, fale com a equipe.</p>
+            <a class="button button-gold button-large" href="./index.html#download" data-track="download_cta" data-track-location="security_cta">Ver downloads oficiais <span class="arrow" aria-hidden="true">↗</span></a>
+          </aside>
+        </article>
+      </div>
+    </main>
+
+    <footer class="site-footer section-wrap">
+      <a class="brand footer-brand" href="./index.html" translate="no"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M16 3.5 27 8v7.7c0 6.4-4.5 10.4-11 12.8C9.5 26.1 5 22.1 5 15.7V8L16 3.5Z" stroke="currentColor" stroke-width="1.5"/><path d="M16 8v14M10.5 11.5h11M11 12l-4 6h8l-4-6ZM21 12l-4 6h8l-4-6ZM12 22h8" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>temis<span class="brand-light">chat</span></span></a>
+      <p>Inteligência jurídica com contexto.</p>
+      <div class="footer-right"><span>© <span id="year">2026</span> TemisChat</span><nav class="footer-links" aria-label="Links institucionais"><a href="./guia-copiloto-juridico.html">Guia</a><a href="./seguranca.html" aria-current="page">Segurança</a><a href="./privacidade.html">Privacidade</a><a href="./notas-de-versao.html">Notas de versão</a><a href="mailto:contato@temischat.com" data-track="contact_email" data-track-location="footer">Contato</a></nav></div>
+    </footer>
+    <script src="./script.js?v=20261028-1"></script>
+  </body>
+</html>

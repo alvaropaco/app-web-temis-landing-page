@@ -253,6 +253,8 @@
   };
 
   const render = (now) => {
+    frame = 0;
+    if (document.body.classList.contains("motion-paused")) return;
     resize();
     pointerState.x += (pointerState.tx - pointerState.x) * 0.035;
     pointerState.y += (pointerState.ty - pointerState.y) * 0.035;
@@ -268,15 +270,24 @@
     gl.uniform2f(pointer, pointerState.x, pointerState.y);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
 
-    if (!document.hidden) frame = requestAnimationFrame(render);
+    if (!document.hidden && !document.body.classList.contains("motion-paused")) frame = requestAnimationFrame(render);
   };
 
   const restart = () => {
-    if (!document.hidden && !frame) {
+    if (!document.hidden && !frame && !document.body.classList.contains("motion-paused")) {
       start = performance.now();
       frame = requestAnimationFrame(render);
     }
   };
+
+  document.addEventListener("temis:motionchange", (event) => {
+    if (event.detail.paused) {
+      cancelAnimationFrame(frame);
+      frame = 0;
+    } else {
+      restart();
+    }
+  });
 
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {

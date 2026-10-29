@@ -7,7 +7,8 @@ Landing page for TemisChat, a desktop legal-intelligence workspace.
 - `index.html`: product, pilot scope, access and official downloads.
 - `guia-copiloto-juridico.html`: educational guide and evaluation criteria.
 - `seguranca.html`: implemented controls and publicly documented limitations.
-- `privacidade.html`: website privacy notice and measurement behavior.
+- `privacidade.html`: privacy policy for the desktop app, workspace and website.
+- `termos-de-servico.html`: pilot terms of service and professional responsibility.
 - `notas-de-versao.html`: live version, date and notes from the official release CDN.
 
 ## Run locally

@@ -1,6 +1,6 @@
 {
-  "version": "0.2.10",
-  "pub_date": "2026-10-28T19:59:59Z",
-  "notes": "Build 607f5b8: https://agent-api.laweragent.com.\n\n- macOS (Apple Silicon e Intel; requer macOS 12.3 ou mais novo): assinado com Developer ID Application e notarizado na Apple — o Gatekeeper abre o app baixado sem nenhum aviso.\n- Windows: instaladores MSI e NSIS não assinados — o SmartScreen pode avisar; use 'Mais informações' → 'Executar assim mesmo'.\n- A partir da 0.2.0 o app se atualiza sozinho: na tela de login ele oferece 'Atualizar e reiniciar' quando encontra versão nova. A 0.1.0 não tem o atualizador — instale por cima uma última vez.",
-  "build": "607f5b8"
+  "version": "0.2.12",
+  "pub_date": "2026-10-29T22:07:37Z",
+  "notes": "Build 7e088bd: https://agent-api.laweragent.com.\n\n- macOS (Apple Silicon e Intel; requer macOS 12.3 ou mais novo): assinado com Developer ID Application e notarizado na Apple — o Gatekeeper abre o app baixado sem nenhum aviso.\n- Windows: instaladores MSI e NSIS não assinados — o SmartScreen pode avisar; use 'Mais informações' → 'Executar assim mesmo'.\n- A partir da 0.2.0 o app se atualiza sozinho: na tela de login ele oferece 'Atualizar e reiniciar' quando encontra versão nova. A 0.1.0 não tem o atualizador — instale por cima uma última vez.",
+  "build": "7e088bd"
 }

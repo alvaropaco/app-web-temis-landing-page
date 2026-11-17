@@ -1,0 +1,26 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  check:
+    name: Static site checks
+    if: github.event_name != "pull_request" || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, linux, x64, ci]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sanity (essenciais presentes)
+        run: |
+          test -f index.html && test -f sitemap.xml && test -f robots.txt
+          grep -q "<title" index.html
+          echo "OK: arquivos obrigatórios presentes"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: |
+            *.html
+            assets/
+            script.js
+            robots.txt
+            sitemap.xml

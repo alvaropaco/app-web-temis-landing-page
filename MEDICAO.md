@@ -2,7 +2,7 @@
 
 ## Estado atual
 
-O site não carrega Google Analytics, Tag Manager ou cookies de publicidade. Os eventos abaixo são adicionados apenas ao `window.dataLayer` e a um evento DOM `temis:track`; eles permanecem na memória da página e não são enviados a um servidor pelo código atual.
+Desde 18/11/2026 a página inicial (`index.html`) carrega o Google Tag Manager (contêiner `GTM-MVXJPWN7`), que consome o `window.dataLayer` e envia os eventos abaixo ao Google conforme as tags configuradas no contêiner. As demais páginas não carregam tracker: os eventos permanecem apenas na memória da página. Não há cookies de publicidade.
 
 ## Eventos disponíveis
 
@@ -21,7 +21,7 @@ Cada evento inclui `location` e `page_path`. Eventos de download podem incluir `
 1. Verifique a propriedade de domínio `temischat.com` no Google Search Console.
 2. Envie `https://temischat.com/sitemap.xml` e inspecione as cinco URLs públicas.
 3. Em Desempenho, compare períodos equivalentes de 28 dias e separe consultas contendo e não contendo `temis`. Revise manualmente variações de marca.
-4. Se um Tag Manager for instalado, configure os eventos acima e atualize `privacidade.html` antes da coleta. Avalie consentimento e requisitos de LGPD com o responsável.
+4. Tag Manager instalado na página inicial. No contêiner `GTM-MVXJPWN7`, criar a tag do Google Analytics e gatilhos de "evento personalizado" para os nomes acima (ex.: `app_download`, `download_cta`), mapeando `location`, `page_path` e `asset` como parâmetros. `privacidade.html` foi atualizada em 18/11/2026; avaliar consentimento e requisitos de LGPD com o responsável.
 5. Meça cliques no CTA e cliques de download por `location`, `page_path` e `asset`.
 
 Um clique em download não comprova que o arquivo foi baixado ou instalado. Para medir conclusão, use logs do CDN ou um evento de ativação devidamente documentado e consentido, sem criar identificadores ocultos.

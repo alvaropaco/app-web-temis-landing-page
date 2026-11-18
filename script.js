@@ -2,7 +2,8 @@
   const year = document.querySelector("#year");
   if (year) year.textContent = new Date().getFullYear();
 
-  // Keep a tag-manager-ready event stream without loading trackers or cookies.
+  // Event stream read by the Google Tag Manager container on the landing page
+  // (head snippet in index.html). Other pages keep the pushes local-only.
   window.dataLayer = window.dataLayer || [];
   document.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target.closest("[data-track]") : null;

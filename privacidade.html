@@ -92,7 +92,7 @@
           <div class="callout">
             <h2>Resumo em cinco linhas</h2>
             <p>O TemisChat guarda sua conta, seu perfil profissional, suas conversas e os dados processuais que você consulta. Para gerar respostas, partes desse conteúdo são enviadas a provedores de IA externos. Não há, no piloto, promessa de retenção zero, de não treinamento por esses provedores ou de armazenamento exclusivo no Brasil.</p>
-            <p>O site não tem cadastro, não usa cookies de publicidade ou analytics e não envia eventos de clique a servidores. Os detalhes, as exceções e o que ainda falta definir estão nas seções abaixo.</p>
+            <p>O site não tem cadastro. A página inicial carrega o Google Tag Manager, que pode enviar ao Google os eventos de clique instrumentados (incluindo cliques em download) e dados de navegação; as demais páginas não enviam eventos a servidores. Os detalhes, as exceções e o que ainda falta definir estão nas seções abaixo.</p>
           </div>
 
           <section id="escopo">
@@ -246,7 +246,8 @@
             <h2>O que o site faz</h2>
             <p>O site institucional não possui formulário de cadastro e não cria conta no navegador. Ao escolher “Fale conosco”, você abre seu próprio aplicativo de e-mail; os dados enviados são os que você decidir incluir na mensagem. Evite enviar dados processuais, documentos de clientes, senhas ou outras informações sensíveis no primeiro contato.</p>
             <p>A infraestrutura de hospedagem e entrega pode processar informações técnicas necessárias para responder às requisições, proteger o serviço e diagnosticar falhas, como endereço IP, data e hora, URL solicitada e dados do navegador. As páginas carregam fontes do Google Fonts e, na homepage e nas notas de versão, consultam o manifesto da release no CDN oficial de downloads.</p>
-            <p>Esta versão do site não implementa cookies próprios de publicidade ou analytics e não cria perfil de navegação. Alguns links possuem instrumentação local que registra cliques em uma estrutura de memória chamada <code>dataLayer</code>; no código atual, <strong>esses eventos não são enviados a nenhum servidor</strong> e existem apenas durante a sessão da página. Se uma ferramenta de analytics ou tag manager for adicionada, esta política e, quando aplicável, o mecanismo de consentimento serão atualizados antes da coleta.</p>
+            <p>O site não implementa cookies próprios de publicidade e não cria perfil de navegação entre sites. Alguns links registram cliques em uma estrutura de memória chamada <code>dataLayer</code> — por exemplo, os cliques em “Baixar” e nos canais de contato. Desde 18/11/2026, <strong>a página inicial carrega o Google Tag Manager</strong>, que consome esses eventos e pode encaminhá-los ao Google (inclusive via Google Analytics) junto com dados como URL visitada, página de origem, dispositivo e navegador; as ferramentas configuradas no contêiner podem definir cookies ou identificadores semelhantes sob domínio do Google. Nas demais páginas, os eventos continuam existindo apenas durante a sessão.</p>
+            <p>Os eventos enviados contêm apenas rótulos de interface (nome do botão, seção da página, arquivo de instalador escolhido) — nunca conteúdo de conversas, processos, documentos ou dados de conta. A base legal e o mecanismo de consentimento para essa medição estão em avaliação pelo responsável; esta política será atualizada quando forem definidos.</p>
           </section>
 
           <section id="criancas">
